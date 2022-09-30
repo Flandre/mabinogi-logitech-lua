@@ -1,16 +1,36 @@
 -- 定义宠物技能状态
-PetGroupStatus = {
-    currentSkillIndex = 1,
-    currentPetIndex = 1,
-    closeStatus = true  --宠物关闭状态,手动关闭宠物时使用
-}
-function PetGroupStatus:new(currentSkillIndex, currentPetIndex)
+function PetGroupStatus(currentSkillIndex, currentPetIndex)
     local o = {};
-    setmetatable(o, self);
-    o.currentSkillIndex = currentSkillIndex;
-    o.currentPetIndex = currentPetIndex;
+    --setmetatable(o, self);
+    o.currentSkillIndex = currentSkillIndex or 1;
+    o.currentPetIndex = currentPetIndex or 1;
     return o
 end
+
+test1 = PetGroupStatus(2, 1)
+test2 = PetGroupStatus(2, 1)
+test3 = PetGroupStatus(2, 1)
+test4 = PetGroupStatus(2, 1)
+
+-- ==================================
+
+PetGroupStatus = {
+    currentSkillIndex: 1,
+    currentPetIndex: 1
+}
+
+function PetGroupStatus: new(currentSkillIndex, currentPetIndex)
+    local o = {};
+    setmetatable(o, self);
+    o.currentSkillIndex = currentSkillIndex or 1;
+    o.currentPetIndex = currentPetIndex or 1;
+    return o
+end
+
+test1 = PetGroupStatus:new(2, 1)
+test2 = PetGroupStatus(2, 1)
+test3 = PetGroupStatus(2, 1)
+test4 = PetGroupStatus(2, 1)
 
 -- G键事件函数
 function OnEvent(event, arg)    
