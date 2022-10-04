@@ -76,7 +76,7 @@ function SummonPetLoop(petGroupStatus, petGroupCfgs)
         petGroupStatus.currentSkillIndex = petGroupStatus.currentSkillIndex + 1
         petGroupStatus.currentPetIndex = 1
     end
-    if(petGroupStatus.currentSkillIndex > #skills) then
+    if(petGroupStatus.currentSkillIndex > #petGroupCfgs) then
         petGroupStatus.currentSkillIndex = 1;
         petGroupStatus.currentPetIndex = 1;
     end
