@@ -19,19 +19,19 @@ function PetGroupCfg(skillKeyTable, petKeyTable, isChangeExtend, waitSleep)
 end
 
 function PressKeyCfg(keyTable, sleep)
-    s = sleep or 10
+   local s = sleep or 10
     if (type(keyTable) == 'table') then
         for i, v in ipairs(keyTable) do
-            PressKey(keyTable)
+            PressKey(v)
         end
         sleep(s)
         for i, v in ipairs(keyTable) do
-            ReleaseKey(keyTable)
+            ReleaseKey(v)
         end
     else 
-        PressKey(keyTable)
+        PressKey(v)
         sleep(s)
-        ReleaseKey(keyTable)
+        ReleaseKey(v)
     end
 end
 
@@ -40,10 +40,11 @@ function SummonPetLoop(petGroupStatus, petGroupCfgs)
     OutputLogMessage("petGroupCfgs length = %s\n", #petGroupCfgs)
     OutputLogMessage("current skill index = %s\n", petGroupStatus.currentSkillIndex)
     OutputLogMessage("current pet index = %s\n", petGroupStatus.currentPetIndex)
+    OutputLogMessage("%s\n", petGroupCfgs[petGroupStatus.currentSkillIndex])
     
-    target = petGroupCfgs[petGroupStatus.currentSkillIndex]
-    pets = target.petKeyTable
-    pet = pets[PetGroupStatus.currentPetIndex]
+    local target = petGroupCfgs[petGroupStatus.currentSkillIndex]
+    local pets = target.petKeyTable
+    local pet = pets[petGroupStatus.currentPetIndex]
     
     PressKeyCfg(CANCEL_SUMMON_PET)
     sleep(100)
@@ -64,24 +65,27 @@ function SummonPetLoop(petGroupStatus, petGroupCfgs)
     sleep(target.waitSleep)
     
     PressKeyCfg(CANCEL_SUMMON_PET)
+
+    local o = {};
     
     if(petGroupStatus.currentPetIndex < #pets) then
-        petGroupStatus.currentPetIndex = petGroupStatus.currentPetIndex + 1
+        o.currentPetIndex = petGroupStatus.currentPetIndex + 1
     else
-        petGroupStatus.currentSkillIndex = petGroupStatus.currentSkillIndex + 1
-        petGroupStatus.currentPetIndex = 1
+        o.currentSkillIndex = petGroupStatus.currentSkillIndex + 1
+        o.currentPetIndex = 1
     end
     if(petGroupStatus.currentSkillIndex > #petGroupCfgs) then
-        petGroupStatus.currentSkillIndex = 1;
-        petGroupStatus.currentPetIndex = 1;
+        o.currentSkillIndex = 1;
+        o.currentPetIndex = 1;
     end
-    return petGroupStatus
+    
+--    return o
     OutputLogMessage("===== end summon pet =====\n")
 end
 
 -- register key group
 G5Status = PetGroupStatus(1, 1)
-G5Config = PetGroupCfg("num5", {"5", "6", "7", "8", "9", "0", "minus", "equal"}, false, 550)
+G5Configs = { PetGroupCfg("num5", {"5", "6", "7", "8", "9", "0", "minus", "equal"}, false, 550) }
 
 
 function OnEvent(event, arg)    
@@ -105,13 +109,13 @@ function OnEvent(event, arg)
     -- G5
     if (event == "MOUSE_BUTTON_RELEASED" and arg == 5) then
         OutputLogMessage("in MOUSE_BUTTON_RELEASED 5 \n");
-        G5Status = SummonPetLoop(G5Status, G5Config)
+        G5Status = SummonPetLoop(G5Status, G5Configs)
         Sleep(50)
-        G5Status = SummonPetLoop(G5Status, G5Config)
+        G5Status = SummonPetLoop(G5Status, G5Configs)
         Sleep(50)
-        G5Status = SummonPetLoop(G5Status, G5Config)
+        G5Status = SummonPetLoop(G5Status, G5Configs)
         Sleep(50)
-        G5Status = SummonPetLoop(G5Status, G5Config)
+        G5Status = SummonPetLoop(G5Status, G5Configs)
         Sleep(50)
     end
     -- G6
