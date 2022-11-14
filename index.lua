@@ -18,20 +18,25 @@ function PetGroupCfg(skillKeyTable, petKeyTable, isChangeExtend, waitSleep)
     return o
 end
 
-function PressKeyCfg(keyTable, sleep)
-   local s = sleep or 10
+function PressKeyCfg(keyTable, sleepTimeout)
+    local s
+    if(nil == sleepTimeout) then
+        s = 10
+    else
+        s = sleepTimeout
+    end
     if (type(keyTable) == 'table') then
         for i, v in ipairs(keyTable) do
             PressKey(v)
         end
-        sleep(s)
+        Sleep(s)
         for i, v in ipairs(keyTable) do
             ReleaseKey(v)
         end
     else 
-        PressKey(v)
-        sleep(s)
-        ReleaseKey(v)
+        PressKey(keyTable)
+        Sleep(s)
+        ReleaseKey(keyTable)
     end
 end
 
@@ -47,7 +52,7 @@ function SummonPetLoop(petGroupStatus, petGroupCfgs)
     local pet = pets[petGroupStatus.currentPetIndex]
     
     PressKeyCfg(CANCEL_SUMMON_PET)
-    sleep(100)
+    Sleep(100)
     
     if (target.isChangeExtend) then
         PressKeyCfg(CHANGE_EXTEND_SKILL_BTN)
@@ -62,7 +67,7 @@ function SummonPetLoop(petGroupStatus, petGroupCfgs)
         PressKeyCfg(CHANGE_EXTEND_SKILL_BTN)
     end
     
-    sleep(target.waitSleep)
+    Sleep(target.waitSleep)
     
     PressKeyCfg(CANCEL_SUMMON_PET)
 
