@@ -1,5 +1,5 @@
-local CHANGE_EXTEND_SKILL_BTN = {'lctrl', 'v'} 
-local BACK_SKILL_KEY_TABLE = {'numperiod'}
+local CHANGE_EXTEND_SKILL_BTN = {'n'} 
+local BACK_SKILL_KEY_TABLE = {'tilde'}
 local CANCEL_SUMMON_PET = {'y'}
 
 function PetGroupStatus(currentSkillIndex, currentPetIndex)
@@ -21,7 +21,7 @@ end
 function PressKeyCfg(keyTable, sleepTimeout)
     local s
     if(nil == sleepTimeout) then
-        s = 10
+        s = 1
     else
         s = sleepTimeout
     end
@@ -70,27 +70,43 @@ function SummonPetLoop(petGroupStatus, petGroupCfgs)
     Sleep(target.waitSleep)
     
     PressKeyCfg(CANCEL_SUMMON_PET)
-
-    local o = {};
     
     if(petGroupStatus.currentPetIndex < #pets) then
-        o.currentPetIndex = petGroupStatus.currentPetIndex + 1
+        petGroupStatus.currentPetIndex = petGroupStatus.currentPetIndex + 1
     else
-        o.currentSkillIndex = petGroupStatus.currentSkillIndex + 1
-        o.currentPetIndex = 1
+        petGroupStatus.currentSkillIndex = petGroupStatus.currentSkillIndex + 1
+        petGroupStatus.currentPetIndex = 1
     end
     if(petGroupStatus.currentSkillIndex > #petGroupCfgs) then
-        o.currentSkillIndex = 1;
-        o.currentPetIndex = 1;
+        petGroupStatus.currentSkillIndex = 1;
+        petGroupStatus.currentPetIndex = 1;
     end
     
---    return o
-    OutputLogMessage("===== end summon pet =====\n")
+    return petGroupStatus;
 end
 
 -- register key group
 G5Status = PetGroupStatus(1, 1)
-G5Configs = { PetGroupCfg("num5", {"5", "6", "7", "8", "9", "0", "minus", "equal"}, false, 550) }
+G5Configs = { 
+    PetGroupCfg("num5", {"5", "6", "7", "8", "9", "0", "minus", "equal"}, false, 550),
+    PetGroupCfg("num6", {"5", "6", "7", "8", "9", "0", "minus", "equal"}, false, 550) 
+}
+
+G7Status = PetGroupStatus(1, 1)
+G7Configs = { 
+    PetGroupCfg("b", {"1", "2", "3", "4", "5", "6", "7", "8"}, true, 550)
+}
+
+G8Status = PetGroupStatus(1, 1)
+G8Configs = { 
+    PetGroupCfg("t", {"1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "minus", "equal"}, true, 550),
+    PetGroupCfg("g", {"1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "minus"}, true, 550),
+}
+
+G12Status = PetGroupStatus(1, 1)
+G12Configs = { 
+    PetGroupCfg("num5", {"1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "minus", "equal"}, true, 550)
+}
 
 
 function OnEvent(event, arg)    
@@ -130,13 +146,28 @@ function OnEvent(event, arg)
     -- G7
     if (event == "MOUSE_BUTTON_RELEASED" and arg == 7) then
         OutputLogMessage("in MOUSE_BUTTON_RELEASED 7 \n");
+        G7Status = SummonPetLoop(G7Status, G7Configs)
     end
     -- G8
     if (event == "MOUSE_BUTTON_RELEASED" and arg == 8) then
         OutputLogMessage("in MOUSE_BUTTON_RELEASED 8 \n");
+        G8Status = SummonPetLoop(G8Status, G8Configs)
     end
     -- G9
     if (event == "MOUSE_BUTTON_RELEASED" and arg == 9) then
         OutputLogMessage("in MOUSE_BUTTON_RELEASED 9 \n");
+    end
+    -- G10
+    if (event == "MOUSE_BUTTON_RELEASED" and arg == 10) then
+        OutputLogMessage("in MOUSE_BUTTON_RELEASED 10 \n");
+    end
+    -- G11
+    if (event == "MOUSE_BUTTON_RELEASED" and arg == 11) then
+        OutputLogMessage("in MOUSE_BUTTON_RELEASED 11 \n");
+    end
+    -- G12
+    if (event == "MOUSE_BUTTON_RELEASED" and arg == 12) then
+        OutputLogMessage("in MOUSE_BUTTON_RELEASED 12 \n");
+        G12Status = SummonPetLoop(G12Status, G12Configs)
     end
 end
