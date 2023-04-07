@@ -1,7 +1,13 @@
-local CHANGE_EXTEND_SKILL_BTN = {'n'} 
-local BACK_SKILL_KEY_TABLE = {'tilde'}
-local CANCEL_SUMMON_PET = {'y'}
+-- 定义按键常量
+local CHANGE_EXTEND_SKILL_BTN = {'n'}       -- 切换额外上端技能栏按键
+local BACK_SKILL_KEY_TABLE = {'tilde'}      -- 切换技能栏1按键
+local CANCEL_SUMMON_PET = {'y'}             -- 取消召唤宠物按键
 
+--[[
+    召唤宠物状态
+    @currentSkillIndex      当前在第几栏
+    @currentPetIndex        当前在第几只
+]] 
 function PetGroupStatus(currentSkillIndex, currentPetIndex)
     local o = {};
     o.currentSkillIndex = currentSkillIndex or 1;
@@ -9,15 +15,30 @@ function PetGroupStatus(currentSkillIndex, currentPetIndex)
     return o
 end
 
-function PetGroupCfg(skillKeyTable, petKeyTable, isChangeExtend, waitSleep)
+--[[
+    宠物组设置
+    @skillKeyTable      切换技能栏按键
+    @petKeyTable        本组宠物按键
+    @isChangeExtend     是否切换右侧技能栏
+    @waitSleep          召唤宠物后等待时间
+    @cancelSummon       是否取消召唤
+]]
+function PetGroupCfg(skillKeyTable, petKeyTable, isChangeExtend, waitSleep, holdSummon, pluginFn)
     local o = {}
     o.skillKeyTable = skillKeyTable
     o.petKeyTable = petKeyTable
     o.isChangeExtend = isChangeExtend or false
     o.waitSleep = waitSleep or 500
+    o.holdSummon = holdSummon or false
+    o.pluginFn = pluginFn or nil
     return o
 end
 
+function TuanPlugin()
+    PressAndReleaseKey("lbracket")
+end
+
+-- 按键或按组合键
 function PressKeyCfg(keyTable, sleepTimeout)
     local s
     if(nil == sleepTimeout) then
@@ -41,36 +62,52 @@ function PressKeyCfg(keyTable, sleepTimeout)
 end
 
 function SummonPetLoop(petGroupStatus, petGroupCfgs)
+    --[[
+    -- 输出状态log
     OutputLogMessage("===== start summon pet =====\n")
     OutputLogMessage("petGroupCfgs length = %s\n", #petGroupCfgs)
     OutputLogMessage("current skill index = %s\n", petGroupStatus.currentSkillIndex)
     OutputLogMessage("current pet index = %s\n", petGroupStatus.currentPetIndex)
     OutputLogMessage("%s\n", petGroupCfgs[petGroupStatus.currentSkillIndex])
+    ]]--
     
+    -- 获取当前宠物组
     local target = petGroupCfgs[petGroupStatus.currentSkillIndex]
+    -- 获取当前宠物组中所有宠物的按键
     local pets = target.petKeyTable
+    -- 获取当前宠物按键
     local pet = pets[petGroupStatus.currentPetIndex]
-    
+    -- 召唤前先取消当前宠物
     PressKeyCfg(CANCEL_SUMMON_PET)
     Sleep(100)
-    
+    -- 如果需切换额外上端技能栏，则进行切换
     if (target.isChangeExtend) then
         PressKeyCfg(CHANGE_EXTEND_SKILL_BTN)
     end
     
+    -- 切换技能栏
     PressKeyCfg(target.skillKeyTable)
+    -- 召唤宠物
     PressKeyCfg(pet)
-    
+    -- 切回技能栏1
     PressKeyCfg(BACK_SKILL_KEY_TABLE)
     
+    -- 如果已切换额外上端技能栏，则切换回原来的上端技能栏
     if (target.isChangeExtend) then
         PressKeyCfg(CHANGE_EXTEND_SKILL_BTN)
     end
-    
+    -- 等待
     Sleep(target.waitSleep)
     
-    PressKeyCfg(CANCEL_SUMMON_PET)
+    if (target.pluginFn) then
+        target.pluginFn()
+    end
+    -- 如果需要取消召唤宠物，则取消召唤
+    if (target.holdSummon) then
+        PressKeyCfg(CANCEL_SUMMON_PET)
+    end
     
+    -- 更新宠物状态
     if(petGroupStatus.currentPetIndex < #pets) then
         petGroupStatus.currentPetIndex = petGroupStatus.currentPetIndex + 1
     else
@@ -86,28 +123,64 @@ function SummonPetLoop(petGroupStatus, petGroupCfgs)
 end
 
 -- register key group
-G5Status = PetGroupStatus(1, 1)
+--[[G5Status = PetGroupStatus(1, 1)
 G5Configs = { 
     PetGroupCfg("num5", {"5", "6", "7", "8", "9", "0", "minus", "equal"}, false, 550),
     PetGroupCfg("num6", {"5", "6", "7", "8", "9", "0", "minus", "equal"}, false, 550) 
+}]]--
+
+-- 羊云/小鹿男/小鬼摩托
+G4Status = PetGroupStatus(1, 1)
+G4Configs = { 
+    PetGroupCfg("num5", {"1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "minus", "equal"}, true, 550),
+    PetGroupCfg("num6", {"1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "minus", "equal"}, true, 550),
+    PetGroupCfg("num7", {"1", "2", "3", "4", "5", "6"}, true, 550)
 }
 
-G7Status = PetGroupStatus(1, 1)
-G7Configs = { 
-    PetGroupCfg("b", {"1", "2", "3", "4", "5", "6", "7", "8"}, true, 550)
-}
-
-G8Status = PetGroupStatus(1, 1)
-G8Configs = { 
+-- 骨龙/青龙
+G5Status = PetGroupStatus(1, 1)
+G5Configs = { 
     PetGroupCfg("t", {"1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "minus", "equal"}, true, 550),
     PetGroupCfg("g", {"1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "minus"}, true, 550),
 }
 
-G12Status = PetGroupStatus(1, 1)
-G12Configs = { 
-    PetGroupCfg("num5", {"1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "minus", "equal"}, true, 550)
+-- 卡丁车
+G8Status = PetGroupStatus(1, 1)
+G8Configs = { 
+    PetGroupCfg("b", {"1", "2", "3", "4", "5", "6", "7", "8"}, true, 550)
 }
 
+-- 途安
+G12Status = PetGroupStatus(1, 1)
+G12Configs = { 
+    PetGroupCfg("num8", {"9", "0", "minus", "equal"}, true, 550, false, TuanPlugin)
+}
+
+-- 狄娜希
+G13Status = PetGroupStatus(1, 1)
+G13Configs = { 
+    PetGroupCfg("num7", {"7", "8", "9", "0", "minus", "equal"}, true, 550)
+}
+
+--[[
+G604布局
+-- 左侧
+    G9 G8 G7
+    G6 G5 G4
+-- 正面
+    G11
+    G10  G1  G12  G3  G13  G2
+        主键     中键      次键
+==========================================
+G502布局
+-- 左侧
+    G6  G5  G4
+-- 正面
+    G8
+    G7  G1  G11  G3  G10  G2
+        主键     中键      次键
+                 G9
+]]
 
 function OnEvent(event, arg)    
     OutputLogMessage("event = %s, arg = %s\n", event, arg);
@@ -126,18 +199,20 @@ function OnEvent(event, arg)
     -- G4
     if (event == "MOUSE_BUTTON_RELEASED" and arg == 4) then
         OutputLogMessage("in MOUSE_BUTTON_RELEASED 4 \n");
+        G4Status = SummonPetLoop(G4Status, G4Configs)
     end
     -- G5
     if (event == "MOUSE_BUTTON_RELEASED" and arg == 5) then
         OutputLogMessage("in MOUSE_BUTTON_RELEASED 5 \n");
         G5Status = SummonPetLoop(G5Status, G5Configs)
+        --[[G5Status = SummonPetLoop(G5Status, G5Configs)
         Sleep(50)
         G5Status = SummonPetLoop(G5Status, G5Configs)
         Sleep(50)
         G5Status = SummonPetLoop(G5Status, G5Configs)
         Sleep(50)
         G5Status = SummonPetLoop(G5Status, G5Configs)
-        Sleep(50)
+        Sleep(50)]]--
     end
     -- G6
     if (event == "MOUSE_BUTTON_RELEASED" and arg == 6) then
@@ -169,5 +244,10 @@ function OnEvent(event, arg)
     if (event == "MOUSE_BUTTON_RELEASED" and arg == 12) then
         OutputLogMessage("in MOUSE_BUTTON_RELEASED 12 \n");
         G12Status = SummonPetLoop(G12Status, G12Configs)
+    end
+    -- G13
+    if (event == "MOUSE_BUTTON_RELEASED" and arg == 13) then
+        OutputLogMessage("in MOUSE_BUTTON_RELEASED 13 \n");
+        G13Status = SummonPetLoop(G13Status, G13Configs)
     end
 end
