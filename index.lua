@@ -187,10 +187,16 @@ G9Configs = {
     PetGroupCfg("num8", {"6", "7", "8"}, true, 550, true, PetSkillCancelPlugin)
 }
 
+-- 柯基
+G11Status = PetGroupStatus(1, 1)
+G11Configs = { 
+    PetGroupCfg("num6", {"9", "0", "minus", "equal"}, false, 550)
+}
+
 -- 途安
 G12Status = PetGroupStatus(1, 1)
 G12Configs = { 
-    PetGroupCfg("num8", {"9", "0", "minus", "equal"}, true, 550, true, TuanPlugin)
+    PetGroupCfg("num8", {"9", "0", "minus", "equal"}, true, 450, true, TuanPlugin)
 }
 
 -- 狐克斯buff
@@ -279,6 +285,10 @@ function OnEvent(event, arg)
     -- G11
     if (event == "MOUSE_BUTTON_RELEASED" and arg == 11) then
         OutputLogMessage("in MOUSE_BUTTON_RELEASED 11 \n");
+        G11Status = SummonPetLoop(G11Status, G11Configs)
+        Sleep(50)
+        G11Status = SummonPetLoop(G11Status, G11Configs)
+        Sleep(50)
     end
     -- G12
     if (event == "MOUSE_BUTTON_RELEASED" and arg == 12) then
