@@ -2,6 +2,8 @@
 local CHANGE_EXTEND_SKILL_BTN = {'n'}       -- 切换额外上端技能栏按键
 local BACK_SKILL_KEY_TABLE = {'tilde'}      -- 切换技能栏1按键
 local CANCEL_SUMMON_PET = {'y'}             -- 取消召唤宠物按键
+local PET_SKILL_1 = {'lbracket'}            -- 宠物技能1按键
+local PET_SKILL_2 = {'rbracket'}            -- 宠物技能2按键
 
 --[[
     召唤宠物状态
@@ -34,8 +36,25 @@ function PetGroupCfg(skillKeyTable, petKeyTable, isChangeExtend, waitSleep, hold
     return o
 end
 
+-- 途安插件，召唤后使用宠物技能栏1
 function TuanPlugin()
-    PressAndReleaseKey("lbracket")
+    PressKeyCfg(PET_SKILL_1)
+end
+
+-- 通用插件，召唤宠物后使用宠物技能栏1，并取消召唤
+function PetSkillCancelPlugin()
+    PressKeyCfg(PET_SKILL_1)
+    Sleep(500)
+    PressKeyCfg(CANCEL_SUMMON_PET)
+end
+
+-- 狐狸插件，召唤后使用宠物技能栏1，并在鼠标位置点击后取消召唤
+function FoxPlugin()
+    PressKeyCfg(PET_SKILL_1)
+    Sleep(800)
+    PressAndReleaseMouseButton(1);
+    Sleep(400);
+    PressKeyCfg(CANCEL_SUMMON_PET)
 end
 
 -- 按键或按组合键
@@ -98,12 +117,13 @@ function SummonPetLoop(petGroupStatus, petGroupCfgs)
     end
     -- 等待
     Sleep(target.waitSleep)
-    
+
     if (target.pluginFn) then
         target.pluginFn()
     end
     -- 如果需要取消召唤宠物，则取消召唤
-    if (target.holdSummon) then
+    OutputLogMessage("hold = %s\n", target.holdSummon)
+    if (not target.holdSummon) then
         PressKeyCfg(CANCEL_SUMMON_PET)
     end
     
@@ -129,6 +149,12 @@ G5Configs = {
     PetGroupCfg("num6", {"5", "6", "7", "8", "9", "0", "minus", "equal"}, false, 550) 
 }]]--
 
+-- 狄娜希
+G3Status = PetGroupStatus(1, 1)
+G3Configs = { 
+    PetGroupCfg("num7", {"7", "8", "9", "0", "minus", "equal"}, true, 550)
+}
+
 -- 羊云/小鹿男/小鬼摩托
 G4Status = PetGroupStatus(1, 1)
 G4Configs = { 
@@ -144,22 +170,33 @@ G5Configs = {
     PetGroupCfg("g", {"1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "minus"}, true, 550),
 }
 
+-- 鲸鱼回血
+G6Status = PetGroupStatus(1, 1)
+G6Configs = { 
+    PetGroupCfg("b", {"0", "minus", "equal"}, true, 550, true, PetSkillCancelPlugin)
+}
+
 -- 卡丁车
 G8Status = PetGroupStatus(1, 1)
 G8Configs = { 
     PetGroupCfg("b", {"1", "2", "3", "4", "5", "6", "7", "8"}, true, 550)
 }
+-- 凤凰复活
+G9Status = PetGroupStatus(1, 1)
+G9Configs = { 
+    PetGroupCfg("num8", {"6", "7", "8"}, true, 550, true, PetSkillCancelPlugin)
+}
 
 -- 途安
 G12Status = PetGroupStatus(1, 1)
 G12Configs = { 
-    PetGroupCfg("num8", {"9", "0", "minus", "equal"}, true, 550, false, TuanPlugin)
+    PetGroupCfg("num8", {"9", "0", "minus", "equal"}, true, 550, true, TuanPlugin)
 }
 
--- 狄娜希
+-- 狐克斯buff
 G13Status = PetGroupStatus(1, 1)
 G13Configs = { 
-    PetGroupCfg("num7", {"7", "8", "9", "0", "minus", "equal"}, true, 550)
+    PetGroupCfg("num8", {"1", "2", "3", "4", "5"}, true, 550, true, FoxPlugin)
 }
 
 --[[
@@ -195,6 +232,7 @@ function OnEvent(event, arg)
     -- G3
     if (event == "MOUSE_BUTTON_RELEASED" and arg == 3) then
         OutputLogMessage("in MOUSE_BUTTON_RELEASED 3 \n");
+        G3Status = SummonPetLoop(G3Status, G3Configs)
     end
     -- G4
     if (event == "MOUSE_BUTTON_RELEASED" and arg == 4) then
@@ -217,6 +255,7 @@ function OnEvent(event, arg)
     -- G6
     if (event == "MOUSE_BUTTON_RELEASED" and arg == 6) then
         OutputLogMessage("in MOUSE_BUTTON_RELEASED 6 \n");
+        G6Status = SummonPetLoop(G6Status, G6Configs)
     end
     -- G7
     if (event == "MOUSE_BUTTON_RELEASED" and arg == 7) then
@@ -231,6 +270,7 @@ function OnEvent(event, arg)
     -- G9
     if (event == "MOUSE_BUTTON_RELEASED" and arg == 9) then
         OutputLogMessage("in MOUSE_BUTTON_RELEASED 9 \n");
+        G9Status = SummonPetLoop(G9Status, G9Configs)
     end
     -- G10
     if (event == "MOUSE_BUTTON_RELEASED" and arg == 10) then
