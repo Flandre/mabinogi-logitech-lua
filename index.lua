@@ -21,9 +21,10 @@ end
     宠物组设置
     @skillKeyTable      切换技能栏按键
     @petKeyTable        本组宠物按键
-    @isChangeExtend     是否切换右侧技能栏
-    @waitSleep          召唤宠物后等待时间
-    @cancelSummon       是否取消召唤
+    @isChangeExtend     是否切换右侧技能栏，默认不切换（false）
+    @waitSleep          召唤宠物后等待时间，默认500ms
+    @holdSummon         是否取消（驻留）召唤，默认取消（false）
+    @pluginFn           流程结束后使用的插件（需自定义）
 ]]
 function PetGroupCfg(skillKeyTable, petKeyTable, isChangeExtend, waitSleep, holdSummon, pluginFn)
     local o = {}
