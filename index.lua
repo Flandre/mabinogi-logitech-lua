@@ -156,14 +156,6 @@ G3Configs = {
     PetGroupCfg("num7", {"7", "8", "9", "0", "minus", "equal"}, true, 550)
 }
 
--- 羊云/小鹿男/小鬼摩托
-G4Status = PetGroupStatus(1, 1)
-G4Configs = { 
-    PetGroupCfg("num5", {"1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "minus", "equal"}, true, 550),
-    PetGroupCfg("num6", {"1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "minus", "equal"}, true, 550),
-    PetGroupCfg("num7", {"1", "2", "3", "4", "5", "6"}, true, 550)
-}
-
 -- 骨龙/青龙
 G5Status = PetGroupStatus(1, 1)
 G5Configs = { 
@@ -175,6 +167,14 @@ G5Configs = {
 G6Status = PetGroupStatus(1, 1)
 G6Configs = { 
     PetGroupCfg("b", {"0", "minus", "equal"}, true, 550, true, PetSkillCancelPlugin)
+}
+
+-- 羊云/小鹿男/小鬼摩托
+G7Status = PetGroupStatus(1, 1)
+G7Configs = { 
+    PetGroupCfg("num5", {"1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "minus", "equal"}, true, 550),
+    PetGroupCfg("num6", {"1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "minus", "equal"}, true, 550),
+    PetGroupCfg("num7", {"1", "2", "3", "4", "5", "6"}, true, 550)
 }
 
 -- 卡丁车
@@ -244,7 +244,6 @@ function OnEvent(event, arg)
     -- G4
     if (event == "MOUSE_BUTTON_RELEASED" and arg == 4) then
         OutputLogMessage("in MOUSE_BUTTON_RELEASED 4 \n");
-        G4Status = SummonPetLoop(G4Status, G4Configs)
     end
     -- G5
     if (event == "MOUSE_BUTTON_RELEASED" and arg == 5) then
@@ -267,7 +266,7 @@ function OnEvent(event, arg)
     -- G7
     if (event == "MOUSE_BUTTON_RELEASED" and arg == 7) then
         OutputLogMessage("in MOUSE_BUTTON_RELEASED 7 \n");
-        G7Status = SummonPetLoop(G7Status, G7Configs)
+        G4Status = SummonPetLoop(G7Status, G7Configs)
     end
     -- G8
     if (event == "MOUSE_BUTTON_RELEASED" and arg == 8) then
