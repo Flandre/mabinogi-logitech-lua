@@ -4,6 +4,7 @@ local BACK_SKILL_KEY_TABLE = {'tilde'}      -- 切换技能栏1按键
 local CANCEL_SUMMON_PET = {'y'}             -- 取消召唤宠物按键
 local PET_SKILL_1 = {'lbracket'}            -- 宠物技能1按键
 local PET_SKILL_2 = {'rbracket'}            -- 宠物技能2按键
+local PET_FRIEND_1 = {'semicolon'}          -- 宠物好友栏1号
 
 --[[
     召唤宠物状态
@@ -45,6 +46,13 @@ end
 -- 通用插件，召唤宠物后使用宠物技能栏1，并取消召唤
 function PetSkillCancelPlugin()
     PressKeyCfg(PET_SKILL_1)
+    Sleep(500)
+    PressKeyCfg(CANCEL_SUMMON_PET)
+end
+
+-- 通用插件，召唤宠物后召唤好友1，并取消召唤
+function PetFriendSummon()
+    PressKeyCfg(PET_FRIEND_1)
     Sleep(500)
     PressKeyCfg(CANCEL_SUMMON_PET)
 end
@@ -151,62 +159,80 @@ G5Configs = {
 }]]--
 
 -- 狄娜希
-G3Status = PetGroupStatus(1, 1)
-G3Configs = { 
+DiNaXiStatus = PetGroupStatus(1, 1)
+DiNaXiConfigs = { 
     PetGroupCfg("num7", {"7", "8", "9", "0", "minus", "equal"}, true, 550)
 }
 
 -- 骨龙/青龙
-G5Status = PetGroupStatus(1, 1)
-G5Configs = { 
-    PetGroupCfg("t", {"1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "minus", "equal"}, true, 550),
-    PetGroupCfg("g", {"1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "minus"}, true, 550),
+GuLongStatus = PetGroupStatus(1, 1)
+GuLongConfigs = { 
+    PetGroupCfg("t", {"1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "minus", "equal"}, true, 550, true, PetFriendSummon),
+    PetGroupCfg("g", {"1", "2", "3", "4", "5", "6", "7", "8", "9", "0"}, true, 550, true, PetFriendSummon),
 }
 
 -- 鲸鱼回血
-G6Status = PetGroupStatus(1, 1)
-G6Configs = { 
-    PetGroupCfg("b", {"0", "minus", "equal"}, true, 550, true, PetSkillCancelPlugin)
+JingYuStatus = PetGroupStatus(1, 1)
+JingYuConfigs = { 
+    PetGroupCfg("num8", {"6", "7", "8"}, true, 550, true, PetSkillCancelPlugin)
 }
 
 -- 羊云/小鹿男/小鬼摩托
-G7Status = PetGroupStatus(1, 1)
-G7Configs = { 
+YangYunStatus = PetGroupStatus(1, 1)
+YangYunConfigs = { 
     PetGroupCfg("num5", {"1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "minus", "equal"}, true, 550),
     PetGroupCfg("num6", {"1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "minus", "equal"}, true, 550),
     PetGroupCfg("num7", {"1", "2", "3", "4", "5", "6"}, true, 550)
 }
 
 -- 卡丁车
-G8Status = PetGroupStatus(1, 1)
-G8Configs = { 
+KaDingCheStatus = PetGroupStatus(1, 1)
+KaDingCheConfigs = { 
     PetGroupCfg("b", {"1", "2", "3", "4", "5", "6", "7", "8"}, true, 550)
 }
 -- 凤凰复活
-G9Status = PetGroupStatus(1, 1)
-G9Configs = { 
-    PetGroupCfg("num8", {"6", "7", "8"}, true, 550, true, PetSkillCancelPlugin)
+FengHuangStatus = PetGroupStatus(1, 1)
+FengHuangConfigs = { 
+    PetGroupCfg("num5", {"6", "7", "8", "9", "0", "minus", "equal"}, false, 550, true, PetSkillCancelPlugin)
 }
 
 -- 柯基
-G11Status = PetGroupStatus(1, 1)
-G11Configs = { 
+KeJiStatus = PetGroupStatus(1, 1)
+KeJiConfigs = { 
     PetGroupCfg("num6", {"9", "0", "minus", "equal"}, false, 550)
 }
 
+-- 猫
+MaoStatus = PetGroupStatus(1, 1)
+MaoConfigs = { 
+    PetGroupCfg("g", {"minus", "equal"}, true, 550)
+}
+
 -- 途安
-G12Status = PetGroupStatus(1, 1)
-G12Configs = { 
+TuAnStatus = PetGroupStatus(1, 1)
+TuAnConfigs = { 
     PetGroupCfg("num8", {"9", "0", "minus", "equal"}, true, 450, true, TuanPlugin)
 }
 
 -- 狐克斯buff
-G13Status = PetGroupStatus(1, 1)
-G13Configs = { 
+HuKeSiStatus = PetGroupStatus(1, 1)
+HuKeSiConfigs = { 
     PetGroupCfg("num8", {"1", "2", "3", "4", "5"}, true, 550, true, FoxPlugin)
 }
 
 --[[
+G600布局
+-- 左侧
+    G11 G14 G17 G20
+    G10 G13 G16 G19
+    G9 G12 G15 G18
+-- 正面
+    
+    G1x  G4  G3x  G5  G2x
+    主键    中键     次键
+            G8
+            G7
+==========================================
 G604布局
 -- 左侧
     G9 G8 G7
@@ -239,44 +265,35 @@ function OnEvent(event, arg)
     -- G3
     if (event == "MOUSE_BUTTON_RELEASED" and arg == 3) then
         OutputLogMessage("in MOUSE_BUTTON_RELEASED 3 \n");
-        G3Status = SummonPetLoop(G3Status, G3Configs)
+        -- G3Status = SummonPetLoop(G3Status, G3Configs)
     end
     -- G4
     if (event == "MOUSE_BUTTON_RELEASED" and arg == 4) then
         OutputLogMessage("in MOUSE_BUTTON_RELEASED 4 \n");
+        TuAnStatus = SummonPetLoop(TuAnStatus, TuAnConfigs)
     end
     -- G5
     if (event == "MOUSE_BUTTON_RELEASED" and arg == 5) then
         OutputLogMessage("in MOUSE_BUTTON_RELEASED 5 \n");
-        G5Status = SummonPetLoop(G5Status, G5Configs)
-        --[[G5Status = SummonPetLoop(G5Status, G5Configs)
-        Sleep(50)
-        G5Status = SummonPetLoop(G5Status, G5Configs)
-        Sleep(50)
-        G5Status = SummonPetLoop(G5Status, G5Configs)
-        Sleep(50)
-        G5Status = SummonPetLoop(G5Status, G5Configs)
-        Sleep(50)]]--
+        HuKeSiStatus = SummonPetLoop(HuKeSiStatus, HuKeSiConfigs)
     end
     -- G6
     if (event == "MOUSE_BUTTON_RELEASED" and arg == 6) then
         OutputLogMessage("in MOUSE_BUTTON_RELEASED 6 \n");
-        G6Status = SummonPetLoop(G6Status, G6Configs)
     end
     -- G7
     if (event == "MOUSE_BUTTON_RELEASED" and arg == 7) then
         OutputLogMessage("in MOUSE_BUTTON_RELEASED 7 \n");
-        G4Status = SummonPetLoop(G7Status, G7Configs)
     end
     -- G8
     if (event == "MOUSE_BUTTON_RELEASED" and arg == 8) then
         OutputLogMessage("in MOUSE_BUTTON_RELEASED 8 \n");
-        G8Status = SummonPetLoop(G8Status, G8Configs)
+        -- G8Status = SummonPetLoop(G8Status, G8Configs)
     end
     -- G9
     if (event == "MOUSE_BUTTON_RELEASED" and arg == 9) then
         OutputLogMessage("in MOUSE_BUTTON_RELEASED 9 \n");
-        G9Status = SummonPetLoop(G9Status, G9Configs)
+        FengHuangStatus = SummonPetLoop(FengHuangStatus, FengHuangConfigs)
     end
     -- G10
     if (event == "MOUSE_BUTTON_RELEASED" and arg == 10) then
@@ -285,19 +302,55 @@ function OnEvent(event, arg)
     -- G11
     if (event == "MOUSE_BUTTON_RELEASED" and arg == 11) then
         OutputLogMessage("in MOUSE_BUTTON_RELEASED 11 \n");
-        G11Status = SummonPetLoop(G11Status, G11Configs)
-        Sleep(50)
-        G11Status = SummonPetLoop(G11Status, G11Configs)
-        Sleep(50)
+        -- G11Status = SummonPetLoop(G11Status, G11Configs)
+        -- Sleep(50)
+        -- G11Status = SummonPetLoop(G11Status, G11Configs)
+        -- Sleep(50)
     end
     -- G12
     if (event == "MOUSE_BUTTON_RELEASED" and arg == 12) then
         OutputLogMessage("in MOUSE_BUTTON_RELEASED 12 \n");
-        G12Status = SummonPetLoop(G12Status, G12Configs)
+        JingYuStatus = SummonPetLoop(JingYuStatus, JingYuConfigs)
     end
     -- G13
     if (event == "MOUSE_BUTTON_RELEASED" and arg == 13) then
         OutputLogMessage("in MOUSE_BUTTON_RELEASED 13 \n");
-        G13Status = SummonPetLoop(G13Status, G13Configs)
+        DiNaXiStatus = SummonPetLoop(DiNaXiStatus, DiNaXiConfigs)
+    end
+    -- G14
+    if (event == "MOUSE_BUTTON_RELEASED" and arg == 14) then
+        OutputLogMessage("in MOUSE_BUTTON_RELEASED 14 \n");
+    end
+    -- G15
+    if (event == "MOUSE_BUTTON_RELEASED" and arg == 15) then
+        OutputLogMessage("in MOUSE_BUTTON_RELEASED 15 \n");
+        GuLongStatus = SummonPetLoop(GuLongStatus, GuLongConfigs)
+    end
+    -- G16
+    if (event == "MOUSE_BUTTON_RELEASED" and arg == 16) then
+        OutputLogMessage("in MOUSE_BUTTON_RELEASED 16 \n");
+        KaDingCheStatus = SummonPetLoop(KaDingCheStatus, KaDingCheConfigs)
+    end
+    -- G17
+    if (event == "MOUSE_BUTTON_RELEASED" and arg == 17) then
+        OutputLogMessage("in MOUSE_BUTTON_RELEASED 17 \n");
+        KeJiStatus = SummonPetLoop(KeJiStatus, KeJiConfigs)
+        Sleep(50)
+        KeJiStatus = SummonPetLoop(KeJiStatus, KeJiConfigs)
+        Sleep(50)
+    end
+    -- G18
+    if (event == "MOUSE_BUTTON_RELEASED" and arg == 18) then
+        OutputLogMessage("in MOUSE_BUTTON_RELEASED 18 \n");
+    end
+    -- G19
+    if (event == "MOUSE_BUTTON_RELEASED" and arg == 19) then
+        OutputLogMessage("in MOUSE_BUTTON_RELEASED 19 \n");
+        YangYunStatus = SummonPetLoop(YangYunStatus, YangYunConfigs)
+    end
+    -- G20
+    if (event == "MOUSE_BUTTON_RELEASED" and arg == 20) then
+        OutputLogMessage("in MOUSE_BUTTON_RELEASED 20 \n");
+        MaoStatus = SummonPetLoop(MaoStatus, MaoConfigs)
     end
 end
