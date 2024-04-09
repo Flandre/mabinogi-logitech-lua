@@ -265,30 +265,31 @@ function OnEvent(event, arg)
     -- G3
     if (event == "MOUSE_BUTTON_RELEASED" and arg == 3) then
         OutputLogMessage("in MOUSE_BUTTON_RELEASED 3 \n");
-        -- G3Status = SummonPetLoop(G3Status, G3Configs)
+        DiNaXiStatus = SummonPetLoop(DiNaXiStatus, DiNaXiConfigs)
     end
     -- G4
     if (event == "MOUSE_BUTTON_RELEASED" and arg == 4) then
         OutputLogMessage("in MOUSE_BUTTON_RELEASED 4 \n");
-        TuAnStatus = SummonPetLoop(TuAnStatus, TuAnConfigs)
     end
     -- G5
     if (event == "MOUSE_BUTTON_RELEASED" and arg == 5) then
         OutputLogMessage("in MOUSE_BUTTON_RELEASED 5 \n");
-        HuKeSiStatus = SummonPetLoop(HuKeSiStatus, HuKeSiConfigs)
+        GuLongStatus = SummonPetLoop(GuLongStatus, GuLongConfigs)
     end
     -- G6
     if (event == "MOUSE_BUTTON_RELEASED" and arg == 6) then
         OutputLogMessage("in MOUSE_BUTTON_RELEASED 6 \n");
+        JingYuStatus = SummonPetLoop(JingYuStatus, JingYuConfigs)
     end
     -- G7
     if (event == "MOUSE_BUTTON_RELEASED" and arg == 7) then
         OutputLogMessage("in MOUSE_BUTTON_RELEASED 7 \n");
+        YangYunStatus = SummonPetLoop(YangYunStatus, YangYunConfigs)
     end
     -- G8
     if (event == "MOUSE_BUTTON_RELEASED" and arg == 8) then
         OutputLogMessage("in MOUSE_BUTTON_RELEASED 8 \n");
-        -- G8Status = SummonPetLoop(G8Status, G8Configs)
+        KaDingCheStatus = SummonPetLoop(KaDingCheStatus, KaDingCheConfigs)
     end
     -- G9
     if (event == "MOUSE_BUTTON_RELEASED" and arg == 9) then
@@ -298,24 +299,25 @@ function OnEvent(event, arg)
     -- G10
     if (event == "MOUSE_BUTTON_RELEASED" and arg == 10) then
         OutputLogMessage("in MOUSE_BUTTON_RELEASED 10 \n");
+        MaoStatus = SummonPetLoop(MaoStatus, MaoConfigs)
     end
     -- G11
     if (event == "MOUSE_BUTTON_RELEASED" and arg == 11) then
         OutputLogMessage("in MOUSE_BUTTON_RELEASED 11 \n");
-        -- G11Status = SummonPetLoop(G11Status, G11Configs)
-        -- Sleep(50)
-        -- G11Status = SummonPetLoop(G11Status, G11Configs)
-        -- Sleep(50)
+        KeJiStatus = SummonPetLoop(KeJiStatus, KeJiConfigs)
+        Sleep(50)
+        KeJiStatus = SummonPetLoop(KeJiStatus, KeJiConfigs)
+        Sleep(50)
     end
     -- G12
     if (event == "MOUSE_BUTTON_RELEASED" and arg == 12) then
         OutputLogMessage("in MOUSE_BUTTON_RELEASED 12 \n");
-        JingYuStatus = SummonPetLoop(JingYuStatus, JingYuConfigs)
+        TuAnStatus = SummonPetLoop(TuAnStatus, TuAnConfigs)
     end
     -- G13
     if (event == "MOUSE_BUTTON_RELEASED" and arg == 13) then
         OutputLogMessage("in MOUSE_BUTTON_RELEASED 13 \n");
-        DiNaXiStatus = SummonPetLoop(DiNaXiStatus, DiNaXiConfigs)
+        HuKeSiStatus = SummonPetLoop(HuKeSiStatus, HuKeSiConfigs)
     end
     -- G14
     if (event == "MOUSE_BUTTON_RELEASED" and arg == 14) then
@@ -324,20 +326,14 @@ function OnEvent(event, arg)
     -- G15
     if (event == "MOUSE_BUTTON_RELEASED" and arg == 15) then
         OutputLogMessage("in MOUSE_BUTTON_RELEASED 15 \n");
-        GuLongStatus = SummonPetLoop(GuLongStatus, GuLongConfigs)
     end
     -- G16
     if (event == "MOUSE_BUTTON_RELEASED" and arg == 16) then
         OutputLogMessage("in MOUSE_BUTTON_RELEASED 16 \n");
-        KaDingCheStatus = SummonPetLoop(KaDingCheStatus, KaDingCheConfigs)
     end
     -- G17
     if (event == "MOUSE_BUTTON_RELEASED" and arg == 17) then
         OutputLogMessage("in MOUSE_BUTTON_RELEASED 17 \n");
-        KeJiStatus = SummonPetLoop(KeJiStatus, KeJiConfigs)
-        Sleep(50)
-        KeJiStatus = SummonPetLoop(KeJiStatus, KeJiConfigs)
-        Sleep(50)
     end
     -- G18
     if (event == "MOUSE_BUTTON_RELEASED" and arg == 18) then
@@ -346,11 +342,9 @@ function OnEvent(event, arg)
     -- G19
     if (event == "MOUSE_BUTTON_RELEASED" and arg == 19) then
         OutputLogMessage("in MOUSE_BUTTON_RELEASED 19 \n");
-        YangYunStatus = SummonPetLoop(YangYunStatus, YangYunConfigs)
     end
     -- G20
     if (event == "MOUSE_BUTTON_RELEASED" and arg == 20) then
         OutputLogMessage("in MOUSE_BUTTON_RELEASED 20 \n");
-        MaoStatus = SummonPetLoop(MaoStatus, MaoConfigs)
     end
 end
