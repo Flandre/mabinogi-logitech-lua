@@ -174,7 +174,7 @@ GuLongConfigs = {
 -- 鲸鱼回血
 JingYuStatus = PetGroupStatus(1, 1)
 JingYuConfigs = { 
-    PetGroupCfg("num8", {"6", "7", "8"}, true, 550, true, PetSkillCancelPlugin)
+    PetGroupCfg("b", {"9", "0", "minus", "equal"}, true, 550, true, PetSkillCancelPlugin)
 }
 
 -- 羊云/小鹿男/小鬼摩托
