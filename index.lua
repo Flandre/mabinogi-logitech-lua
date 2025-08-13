@@ -53,7 +53,7 @@ end
 -- 通用插件，召唤宠物后召唤好友1，并取消召唤
 function PetFriendSummon()
     PressKeyCfg(PET_FRIEND_1)
-    Sleep(500)
+    Sleep(150)
     PressKeyCfg(CANCEL_SUMMON_PET)
 end
 
@@ -62,8 +62,21 @@ function FoxPlugin()
     PressKeyCfg(PET_SKILL_1)
     Sleep(800)
     PressAndReleaseMouseButton(1);
-    Sleep(400);
+    --[[PressMouseButton(1)
+    Sleep(20)
+    ReleaseMouseButton(1)
+    Sleep(400);]]
     PressKeyCfg(CANCEL_SUMMON_PET)
+end
+
+-- 卡丁车插件，召唤后准备水泡
+function CarPlugin()
+    PressKeyCfg(PET_SKILL_2)
+end
+
+-- 兔兔插件，召唤后准备胡萝卜炸弹
+function RabbitPlugin()
+    PressKeyCfg(PET_SKILL_1)
 end
 
 -- 按键或按组合键
@@ -159,65 +172,76 @@ G5Configs = {
 }]]--
 
 -- 狄娜希
-DiNaXiStatus = PetGroupStatus(1, 1)
-DiNaXiConfigs = { 
-    PetGroupCfg("num7", {"7", "8", "9", "0", "minus", "equal"}, true, 550)
-}
+-- DiNaXiStatus = PetGroupStatus(1, 1)
+-- DiNaXiConfigs = { 
+--     PetGroupCfg("num8", {"6", "7", "8", "9", "0", "minus", "equal"}, false, 550, true, PetFriendSummon)
+-- }
 
 -- 骨龙/青龙
 GuLongStatus = PetGroupStatus(1, 1)
 GuLongConfigs = { 
-    PetGroupCfg("t", {"1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "minus", "equal"}, true, 550, true, PetFriendSummon),
-    PetGroupCfg("g", {"1", "2", "3", "4", "5", "6", "7", "8", "9", "0"}, true, 550, true, PetFriendSummon),
+    PetGroupCfg("t", {"1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "minus", "equal"}, true, 550),
+    PetGroupCfg("g", {"1", "2", "3", "4", "5", "6", "7", "8"}, true, 550),
 }
 
 -- 鲸鱼回血
 JingYuStatus = PetGroupStatus(1, 1)
 JingYuConfigs = { 
-    PetGroupCfg("b", {"9", "0", "minus", "equal"}, true, 550, true, PetSkillCancelPlugin)
+    PetGroupCfg("num7", {"1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "minus", "equal"}, true, 550, true, PetSkillCancelPlugin),
+    PetGroupCfg("num8", {"9", "0", "minus", "equal"}, true, 550, true, PetSkillCancelPlugin)
 }
 
 -- 羊云/小鹿男/小鬼摩托
 YangYunStatus = PetGroupStatus(1, 1)
 YangYunConfigs = { 
     PetGroupCfg("num5", {"1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "minus", "equal"}, true, 550),
-    PetGroupCfg("num6", {"1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "minus", "equal"}, true, 550),
-    PetGroupCfg("num7", {"1", "2", "3", "4", "5", "6"}, true, 550)
+    PetGroupCfg("num6", {"1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "minus", "equal"}, true, 550)
 }
 
 -- 卡丁车
 KaDingCheStatus = PetGroupStatus(1, 1)
 KaDingCheConfigs = { 
-    PetGroupCfg("b", {"1", "2", "3", "4", "5", "6", "7", "8"}, true, 550)
+    PetGroupCfg("b", {"1", "2", "3", "4", "5", "6", "7", "8"}, true, 550, true, CarPlugin)
 }
 -- 凤凰复活
 FengHuangStatus = PetGroupStatus(1, 1)
 FengHuangConfigs = { 
     PetGroupCfg("num5", {"6", "7", "8", "9", "0", "minus", "equal"}, false, 550, true, PetSkillCancelPlugin)
 }
-
 -- 柯基
 KeJiStatus = PetGroupStatus(1, 1)
 KeJiConfigs = { 
-    PetGroupCfg("num6", {"9", "0", "minus", "equal"}, false, 550)
+    PetGroupCfg("num6", {"1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "minus", "equal"}, false, 550)
+}
+
+-- 兔兔
+RabbitStatus = PetGroupStatus(1, 1)
+RabbitConfigs = { 
+    PetGroupCfg("tilde", {"6", "7"}, true, 550, true, RabbitPlugin)
 }
 
 -- 猫
 MaoStatus = PetGroupStatus(1, 1)
 MaoConfigs = { 
-    PetGroupCfg("g", {"minus", "equal"}, true, 550)
+    PetGroupCfg("g", {"0", "minus", "equal"}, true, 550)
 }
 
 -- 途安
 TuAnStatus = PetGroupStatus(1, 1)
 TuAnConfigs = { 
-    PetGroupCfg("num8", {"9", "0", "minus", "equal"}, true, 450, true, TuanPlugin)
+    PetGroupCfg("b", {"9", "0", "minus", "equal"}, true, 450, true, TuanPlugin)
 }
 
 -- 狐克斯buff
 HuKeSiStatus = PetGroupStatus(1, 1)
 HuKeSiConfigs = { 
-    PetGroupCfg("num8", {"1", "2", "3", "4", "5"}, true, 550, true, FoxPlugin)
+    PetGroupCfg("num8", {"1", "2", "3", "4", "5", "6"}, true, 550, true, FoxPlugin)
+}
+
+-- 凯特西
+KaiTeXiStatus = PetGroupStatus(1, 1)
+KaiTeXiConfigs = { 
+    PetGroupCfg("num7", {"5", "6", "7", "8", "9", "0", "minus", "equal"}, false, 550, true, PetFriendSummon)
 }
 
 --[[
@@ -265,7 +289,7 @@ function OnEvent(event, arg)
     -- G3
     if (event == "MOUSE_BUTTON_RELEASED" and arg == 3) then
         OutputLogMessage("in MOUSE_BUTTON_RELEASED 3 \n");
-        DiNaXiStatus = SummonPetLoop(DiNaXiStatus, DiNaXiConfigs)
+        KaiTeXiStatus = SummonPetLoop(KaiTeXiStatus, KaiTeXiConfigs)
     end
     -- G4
     if (event == "MOUSE_BUTTON_RELEASED" and arg == 4) then
@@ -294,7 +318,7 @@ function OnEvent(event, arg)
     -- G9
     if (event == "MOUSE_BUTTON_RELEASED" and arg == 9) then
         OutputLogMessage("in MOUSE_BUTTON_RELEASED 9 \n");
-        FengHuangStatus = SummonPetLoop(FengHuangStatus, FengHuangConfigs)
+        -- FengHuangStatus = SummonPetLoop(FengHuangStatus, FengHuangConfigs)
     end
     -- G10
     if (event == "MOUSE_BUTTON_RELEASED" and arg == 10) then
@@ -304,10 +328,11 @@ function OnEvent(event, arg)
     -- G11
     if (event == "MOUSE_BUTTON_RELEASED" and arg == 11) then
         OutputLogMessage("in MOUSE_BUTTON_RELEASED 11 \n");
-        KeJiStatus = SummonPetLoop(KeJiStatus, KeJiConfigs)
-        Sleep(50)
-        KeJiStatus = SummonPetLoop(KeJiStatus, KeJiConfigs)
-        Sleep(50)
+        RabbitStatus = SummonPetLoop(RabbitStatus, RabbitConfigs)
+        --KeJiStatus = SummonPetLoop(KeJiStatus, KeJiConfigs)
+        --Sleep(50)
+        --KeJiStatus = SummonPetLoop(KeJiStatus, KeJiConfigs)
+        --Sleep(50)
     end
     -- G12
     if (event == "MOUSE_BUTTON_RELEASED" and arg == 12) then
@@ -317,7 +342,7 @@ function OnEvent(event, arg)
     -- G13
     if (event == "MOUSE_BUTTON_RELEASED" and arg == 13) then
         OutputLogMessage("in MOUSE_BUTTON_RELEASED 13 \n");
-        HuKeSiStatus = SummonPetLoop(HuKeSiStatus, HuKeSiConfigs)
+        -- HuKeSiStatus = SummonPetLoop(HuKeSiStatus, HuKeSiConfigs)
     end
     -- G14
     if (event == "MOUSE_BUTTON_RELEASED" and arg == 14) then
